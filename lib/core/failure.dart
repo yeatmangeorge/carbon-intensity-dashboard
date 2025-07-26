@@ -5,6 +5,8 @@ sealed class Failure {
   factory Failure.networkConnection() => NetworkConnectionFailure();
 
   factory Failure.http(int restCode) => HttpFailure(restCode);
+
+  factory Failure.unknown() => UnknownFailure();
 }
 
 class NetworkConnectionFailure implements Failure {}
@@ -14,3 +16,5 @@ class HttpFailure implements Failure {
 
   HttpFailure(this.restCode);
 }
+
+class UnknownFailure implements Failure {}
