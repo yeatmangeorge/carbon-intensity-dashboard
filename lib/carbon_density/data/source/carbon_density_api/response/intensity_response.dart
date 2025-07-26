@@ -5,7 +5,7 @@ part 'intensity_response.g.dart';
 @JsonSerializable()
 class IntensityResponse {
   final int forecast;
-  final int actual;
+  final int? actual;
   final String index;
 
   IntensityResponse({
