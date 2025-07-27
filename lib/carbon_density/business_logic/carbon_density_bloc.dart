@@ -23,7 +23,7 @@ class CarbonDensityBloc extends Bloc<CarbonDensityEvent, CarbonDensityState> {
   FutureOr<void> _onStartPollingEvent(
     StartPollingCarbonDensityEvent event,
     Emitter<CarbonDensityState> emit,
-  ) {
+  ) async {
     final now = DateTime.now();
     final startOfToday = DateTime(now.year, now.month, now.day);
     final startOfTomorrow = DateTime(now.year, now.month, now.day + 1);
