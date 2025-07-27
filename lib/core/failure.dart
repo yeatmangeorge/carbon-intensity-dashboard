@@ -7,6 +7,8 @@ sealed class Failure {
   factory Failure.http(int restCode) => HttpFailure(restCode);
 
   factory Failure.unknown() => UnknownFailure();
+
+  factory Failure.invalidState() => InvalidStateFailure();
 }
 
 class NetworkConnectionFailure implements Failure {}
@@ -18,3 +20,5 @@ class HttpFailure implements Failure {
 }
 
 class UnknownFailure implements Failure {}
+
+class InvalidStateFailure implements Failure {}

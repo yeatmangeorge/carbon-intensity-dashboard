@@ -1,4 +1,8 @@
 import 'package:carbon_intensity_dashboard/carbon_density/data/source/carbon_density_api/response/intensity_response.dart';
+import 'package:carbon_intensity_dashboard/core/either.dart';
+import 'package:carbon_intensity_dashboard/core/failure.dart';
+import 'package:carbon_intensity_dashboard/core/model/carbon_intensity.dart';
+import 'package:carbon_intensity_dashboard/core/model/carbon_intensity_period.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'intensity_with_date_response.g.dart';
@@ -16,4 +20,14 @@ class IntensityWithDateResponse {
       _$IntensityWithDateResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$IntensityWithDateResponseToJson(this);
+
+  Either<Failure, CarbonIntensityPeriod> toCarbonIntensityPeriod() {
+    final CarbonIntensity carbonIntensity = intensity.toCarbonIntensity().fold(
+      onLeft: (Failure failure) {
+        return Either.left(failure);
+      },
+      onRight: (CarbonIntensity value) => value,
+    );
+    return CarbonIntensityPeriod.create(from, to, carbonIntensity);
+  }
 }

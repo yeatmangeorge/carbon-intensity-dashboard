@@ -5,6 +5,7 @@ import 'package:carbon_intensity_dashboard/carbon_density/data/source/carbon_den
 import 'package:carbon_intensity_dashboard/carbon_density/data/source/carbon_density_api/response/intensity_data_response.dart';
 import 'package:carbon_intensity_dashboard/core/either.dart';
 import 'package:carbon_intensity_dashboard/core/failure.dart';
+import 'package:carbon_intensity_dashboard/core/model/carbon_intensity_period.dart';
 
 final _pollRateMs = 30_000;
 
@@ -16,20 +17,32 @@ class StandardCarbonDensityRepository implements CarbonDensityRepository {
   }) : _carbonDensityApiDatasource = carbonDensityApiDatasource;
 
   @override
-  Future<Either<Failure, IntensityDataResponse>> getPeriodsBetween(
+  Future<Either<Failure, List<CarbonIntensityPeriod>>> getPeriodsBetween(
     DateTime from,
     DateTime to,
-  ) {
-    return _carbonDensityApiDatasource.fetchIntensity(from, to);
+  ) async {
+    final Either<Failure, IntensityDataResponse> carbonIntensityResponseResult =
+        await _carbonDensityApiDatasource.fetchIntensity(from, to);
+
+    final IntensityDataResponse intensityDataResponse =
+        carbonIntensityResponseResult.fold(
+          onLeft: (Failure failure) {
+            return Either.left(failure);
+          },
+          onRight: (IntensityDataResponse intensityDataResponse) =>
+              intensityDataResponse,
+        );
+
+    return intensityDataResponse.toIntensityPeriodList();
   }
 
   @override
-  Stream<Either<Failure, IntensityDataResponse>> getPeriodsBetweenStream(
+  Stream<Either<Failure, List<CarbonIntensityPeriod>>> getPeriodsBetweenStream(
     DateTime from,
     DateTime to,
   ) {
     final controller =
-        StreamController<Either<Failure, IntensityDataResponse>>();
+        StreamController<Either<Failure, List<CarbonIntensityPeriod>>>();
     Timer? timer;
 
     void poll() async {
