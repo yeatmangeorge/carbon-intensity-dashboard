@@ -1,15 +1,15 @@
-import 'package:carbon_intensity_dashboard/carbon_density/data/source/carbon_density_api/response/intensity_data_response.dart';
 import 'package:carbon_intensity_dashboard/core/either.dart';
 import 'package:carbon_intensity_dashboard/core/failure.dart';
+import 'package:carbon_intensity_dashboard/core/model/carbon_intensity_period.dart';
 
 abstract class CarbonDensityRepository {
   /// fetches in half hour periods
-  Future<Either<Failure, IntensityDataResponse>> getPeriodsBetween(
+  Future<Either<Failure, List<CarbonIntensityPeriod>>> getPeriodsBetween(
     DateTime from,
     DateTime to,
   );
 
-  Stream<Either<Failure, IntensityDataResponse>> getPeriodsBetweenStream(
+  Stream<Either<Failure, List<CarbonIntensityPeriod>>> getPeriodsBetweenStream(
     DateTime from,
     DateTime to,
   );
