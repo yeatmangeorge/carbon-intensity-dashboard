@@ -1,3 +1,6 @@
+import 'package:carbon_intensity_dashboard/core/either.dart';
+import 'package:carbon_intensity_dashboard/core/failure.dart';
+import 'package:carbon_intensity_dashboard/core/model/carbon_intensity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'intensity_response.g.dart';
@@ -18,4 +21,8 @@ class IntensityResponse {
       _$IntensityResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$IntensityResponseToJson(this);
+
+  Either<Failure, CarbonIntensity> toCarbonIntensity() {
+    return CarbonIntensity.create(forecast, actual);
+  }
 }
